@@ -15,7 +15,7 @@ export const consumerBuyerDirectMessage = async (channel: Channel) : Promise<voi
         if(!channel){
             channel = await createConnection() as Channel;
         }
-        const exchangeName = 'freelance-buyer-updates';
+        const exchangeName = 'freelance-buyer-update'; 
         const routingKey= 'user-buyer';
         const queueName = 'buyer-update-queue';
         await channel.assertExchange(exchangeName,'direct',{durable:true});
@@ -36,8 +36,8 @@ export const consumerBuyerDirectMessage = async (channel: Channel) : Promise<voi
                 await createBuyer(buyerData);
             }
             else {
-                const {buyerId , purchasedGigId} = JSON.parse(msg!.content.toString());
-                await updateBuyerPurchaseGigs(buyerId,purchasedGigId,type);
+                const {buyerId , purchasedGigs } = JSON.parse(msg!.content.toString());
+                await updateBuyerPurchaseGigs(buyerId,purchasedGigs,type);
             }
             channel.ack(msg!);
              
@@ -132,9 +132,9 @@ export const consumeSeedGigDirectMessage = async (channel: Channel): Promise<voi
           await userPublishDirectMessage(
             channel, 
             'freelance-seed-gig', 
-            'recieve-seller', 
-            JSON.stringify({type : 'recieveSellers' ,seller , count}), 
-            'Message Sent to The Gig Service');
+            'receive-seller', 
+            JSON.stringify({type : 'receiveSellers' ,seller , count}), 
+            'Message Sent to The Gig Service'); 
         }
         channel.ack(msg!);
       });
